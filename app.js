@@ -1,31 +1,16 @@
 (function() {
 
     var express = require('express')
+        ,request = require('request')
         ,app = express(
             express.cookieParser()
             ,express.session({ secret: 'mWvjLAEW84uQLH14', maxAge: 86400000 })
         );
     var server = require('http').createServer(app)
-        , io = require('socket.io').listen(server);
+        , io = require('socket.io').listen(server)
+        , url = require('url')
+        , cbKey = '82ssqqcpkk79az4uhhfu7sk5';
 
-    server.listen(8445);
-
-    io.sockets.on('connection', function (socket) {
-        socket.emit('state', { status: 'connected to socket on port 80' });
-        socket.on('my other event', function (data) {
-            console.log(data);
-        });
-    });
-
-    require('nodetime').profile({
-        accountKey: '175703d3a950b4064cadf0a5cfe844ce2e875c5d',
-        reportingServer: 'console',
-        debug: true,
-        //stdout: true,
-        appService: 'Test Service',
-        appName: 'Test Server'
-
-    });
 
     app.set("view options", {layout:false});
     app.use(express.static(__dirname + '/public'));
@@ -41,6 +26,34 @@
 
     app.get('/', function (req, res) {
         res.render("index.html");
+    });
+
+    app.get('/cb/search',function(req,res) {
+
+        var urlObj = url.parse(req.url,true);
+
+        request(
+            {
+                url : 'http://api.crunchbase.com/v/1/search.js'
+                ,qs : {
+                        api_key     :   cbKey
+                        ,query      :   urlObj.query['search']
+                      }
+            },function(error, response, body) {
+            if (!error && response.statusCode == 200) {
+                console.log(body);
+                res.send(body);
+            } else {
+                res.send({error: 'something happened'});
+            }
+        });
+    });
+    app.get('/cb/people',function(req,res){
+        res.send();
+
+    });
+    app.get('/cb/companies',function(req,res){
+        res.send();
     });
 
     app.listen(8445);
