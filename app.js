@@ -9,7 +9,7 @@
     var server = require('http').createServer(app)
         , io = require('socket.io').listen(server)
         , url = require('url')
-        , cbKey = '82ssqqcpkk79az4uhhfu7sk5';
+        , cbKey = '82ssqqcpkk79az4uhhfu7sk5'; //PLEASE GET YOUR OWN KEY
 
 
     app.set("view options", {layout:false});
