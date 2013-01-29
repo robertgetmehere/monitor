@@ -1,0 +1,9 @@
+#output {
+    width:500px;
+    height:500px;
+    display:block;
+    overflow-x:hidden;
+    overflow-y:scroll;
+    text-wrap:unrestricted;
+    border:1px solid #999;
+}

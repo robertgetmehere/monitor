@@ -8,15 +8,24 @@ define('main', [
     function ($, _,Backbone,Logger,SearchCollection) {
         var appView = Backbone.View.extend({
             el: $('#client_root'),
+            events: {
+                'click #btnSearch' : 'doSearch'
+            },
             initialize: function() {
                 console.log('initialized');
                 this.log = new Logger();
-                this.search = new SearchCollection({search: 'square'});
+
+            },
+            doSearch: function() {
+                this.search = new SearchCollection({search: $('#searchTerm').val()});
                 this.search.bind('reset',this.procSearch,this);
                 this.search.fetch();
+                console.log($('#searchTerm').val());
             },
             procSearch: function() {
-
+                if (this.search.length > 0) {
+                    JSON.stringify(this.search);
+                }
             }
         });
 
